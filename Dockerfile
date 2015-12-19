@@ -7,11 +7,13 @@ RUN export DEBIAN_FRONTEND=noninteractive; \
     apt-get install -yV -o DPkg::Options::=--force-confold \
         dovecot-core \
         dovecot-imapd \
-        redis-server
+        redis-server \
+        haveged
 
 RUN apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY data/ /data/
-CMD /usr/bin/redis-server /data/configs/redis.conf; \
+CMD /usr/sbin/haveged -w 1024; \
+    /usr/bin/redis-server /data/configs/redis.conf; \
     /usr/sbin/dovecot -c /data/configs/dovecot.conf; \
     tail -f /var/log/dovecot.log
