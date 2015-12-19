@@ -13,7 +13,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; \
 RUN apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY data/ /data/
-RUN cp /data/ssl/ssl-parameters.dat /var/lib/dovecot/ssl-parameters.dat
+RUN mkdir -p /var/lib/dovecot/ && cp /data/ssl/ssl-parameters.dat /var/lib/dovecot/ssl-parameters.dat
 CMD /usr/sbin/dovecot -c /data/configs/dovecot.conf; \
     /usr/sbin/rngd -r /dev/random; \
     /usr/bin/redis-server /data/configs/redis.conf; \
