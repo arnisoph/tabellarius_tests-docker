@@ -8,12 +8,12 @@ RUN export DEBIAN_FRONTEND=noninteractive; \
         dovecot-core \
         dovecot-imapd \
         redis-server \
-        haveged
+        rng-tools
 
 RUN apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY data/ /data/
-CMD /usr/sbin/haveged -w 1024; \
+CMD /usr/sbin/rngd -r /dev/random; \
     /usr/bin/redis-server /data/configs/redis.conf; \
     /usr/sbin/dovecot -c /data/configs/dovecot.conf; \
     tail -f /var/log/dovecot.log
